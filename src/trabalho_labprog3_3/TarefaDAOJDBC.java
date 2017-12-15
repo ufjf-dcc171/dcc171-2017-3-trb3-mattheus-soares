@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -34,12 +35,16 @@ public class TarefaDAOJDBC implements TarefaDAO {
 
     private PreparedStatement operacaoListarTarefaRequisito;
     private PreparedStatement operacaoInserirTarefaRequisito;
+    private PreparedStatement operacaoRemoverTarefaRequisito;
 
     private PreparedStatement operacaoAtualizarDescricao;
     private PreparedStatement operacaoAtualizarDuracaoEsperada;
     private PreparedStatement operacaoAtualizarPercentual;
     private PreparedStatement operacaoAtualizarDataFim;
     private PreparedStatement operacaoAtualizarStatus;
+
+    private PreparedStatement operacaoListarTarefasLivres;
+    private String stListarTarefasLivres;
 
     public TarefaDAOJDBC() throws Exception {
         conexao = ConexaoJavaDB.getConnection();
@@ -49,7 +54,7 @@ public class TarefaDAOJDBC implements TarefaDAO {
         operacaoListarPorFazer = conexao.prepareStatement("SELECT id,descricao,duracao_esperada,percentual,data_inicio,data_fim,status,id_projeto FROM tarefas WHERE status = 1 AND id_projeto = ?");
 
         operacaoListarIniciaveisQ1 = conexao.prepareStatement("SELECT id_tarefarequisito FROM tarefas_requisitos WHERE id_tarefaatual = ?");
-        operacaoListarIniciaveisQ2 = conexao.prepareStatement("SELECT id,descricao,duracao_esperada,percentual,data_inicio,data_fim,status,id_projeto FROM tarefas WHERE status = 2 AND id = ? AND id_projeto = ?");
+        operacaoListarIniciaveisQ2 = conexao.prepareStatement("SELECT id,descricao,duracao_esperada,percentual,data_inicio,data_fim,status,id_projeto FROM tarefas WHERE status = 1 AND id = ? AND id_projeto = ?");
 
         operacaoSelecionar = conexao.prepareStatement("SELECT id,descricao,duracao_esperada,percentual,data_inicio,data_fim,status,id_projeto FROM tarefas WHERE id = ?");
         operacaoInserirPessoa = conexao.prepareStatement("INSERT INTO pessoas_tarefas(id_pessoa,id_tarefa) VALUES(?,?)");
@@ -59,6 +64,7 @@ public class TarefaDAOJDBC implements TarefaDAO {
 
         operacaoListarTarefaRequisito = conexao.prepareStatement("SELECT id,descricao,duracao_esperada,percentual,data_inicio,data_fim,status,id_projeto FROM tarefas WHERE id_projeto = ? AND NOT id = ?");
         operacaoInserirTarefaRequisito = conexao.prepareStatement("INSERT INTO tarefas_requisitos(id_tarefaatual,id_tarefarequisito) VALUES(?,?)");
+        operacaoRemoverTarefaRequisito = conexao.prepareStatement("DELETE FROM tarefas_requisitos WHERE id_tarefaatual = ? AND id_tarefarequisito = ?");
 
         operacaoAtualizarDescricao = conexao.prepareStatement("UPDATE tarefas SET descricao = ? WHERE id = ?");
         operacaoAtualizarDuracaoEsperada = conexao.prepareStatement("UPDATE tarefas SET duracao_esperada = ? WHERE id = ?");
@@ -66,6 +72,54 @@ public class TarefaDAOJDBC implements TarefaDAO {
         operacaoAtualizarDataFim = conexao.prepareStatement("UPDATE tarefas SET data_fim = CURRENT_TIMESTAMP WHERE id = ?");
         operacaoAtualizarStatus = conexao.prepareStatement("UPDATE tarefas SET status = ? WHERE id = ?");
 
+        operacaoListarTarefasLivres = conexao.prepareStatement("SELECT id,descricao,duracao_esperada,percentual,data_inicio,data_fim,status,id_projeto FROM tarefas WHERE id_projeto = ? AND NOT id = ?");
+
+    }
+
+    @Override
+    public List<Tarefa> listarTarefasNaoRequisito(Integer id_projeto, Integer id_tarefa) throws Exception {
+        operacaoListarIniciaveisQ1.clearParameters();
+        operacaoListarIniciaveisQ1.setInt(1, id_tarefa);
+        ResultSet resultado = operacaoListarIniciaveisQ1.executeQuery();
+        List<Integer> ids = new ArrayList<>();
+        while (resultado.next()) {
+            ids.add(resultado.getInt("id_tarefarequisito"));
+        }
+
+        List<Tarefa> requisito = new ArrayList<>();
+        operacaoListarTarefasLivres.clearParameters();
+        operacaoListarTarefasLivres.setInt(1, id_projeto);
+        operacaoListarTarefasLivres.setInt(2, id_tarefa);
+        ResultSet r = operacaoListarTarefasLivres.executeQuery();
+        while (r.next()) {
+            Tarefa t = new Tarefa();
+            t.setId(r.getInt("id"));
+            t.setDescricao(r.getString("descricao"));
+            t.setDuracao_esperada(r.getInt("duracao_esperada"));
+            t.setPercentual(Double.parseDouble(r.getString("percentual")));
+            t.setData_inicio(r.getDate("data_inicio"));
+            t.setData_final(r.getDate("data_fim"));
+            t.setStatus(r.getInt("status"));
+            t.setID_Projeto(id_projeto);
+            requisito.add(t);
+        }
+        if (!requisito.isEmpty() && !ids.isEmpty()) {
+
+            Integer l = requisito.size();
+            Integer k = 0;
+            while (k < l) {
+                for (int i = 0; i < ids.size(); i++) {
+                    if (!requisito.get(k).getId().equals(ids.get(i))) {
+                        requisito.remove(k);
+                        l--;
+                    }
+                }
+                k++;
+            }
+
+        }
+
+        return requisito;
     }
 
     @Override
@@ -148,8 +202,8 @@ public class TarefaDAOJDBC implements TarefaDAO {
         operacaoListarIniciaveisQ1.clearParameters();
         operacaoListarIniciaveisQ1.setInt(1, id_tarefa_atual);
         ResultSet resultado = operacaoListarIniciaveisQ1.executeQuery();
-        List<Integer> ids = null;
-        List<ResultSet> r = null;
+        List<Integer> ids = new ArrayList<>();
+        List<ResultSet> r = new ArrayList<>();
         while (resultado.next()) {
             ids.add(resultado.getInt("id_tarefarequisito"));
         }
@@ -243,12 +297,21 @@ public class TarefaDAOJDBC implements TarefaDAO {
     }
 
     @Override
-    public List<Tarefa> listarTarefasRequisito(Integer id_projeto, Integer id_tarefa) throws Exception {
+    public List<Tarefa> listarTarefasPossivelRequisito(Integer id_projeto, Integer id_tarefa) throws Exception {
+        operacaoListarIniciaveisQ1.clearParameters();
+        operacaoListarIniciaveisQ1.setInt(1, id_tarefa);
+        ResultSet r = operacaoListarIniciaveisQ1.executeQuery();
+        List<Integer> ids = new ArrayList<>();
+        while (r.next()) {
+            ids.add(r.getInt("id_tarefarequisito"));
+        }
+
         List<Tarefa> tarefa = new ArrayList<>();
         operacaoListarTarefaRequisito.clearParameters();
         operacaoListarTarefaRequisito.setInt(1, id_projeto);
         operacaoListarTarefaRequisito.setInt(2, id_tarefa);
         ResultSet resultado = operacaoListarTarefaRequisito.executeQuery();
+
         while (resultado.next()) {
             Tarefa t = new Tarefa();
             t.setId(resultado.getInt("id"));
@@ -260,7 +323,22 @@ public class TarefaDAOJDBC implements TarefaDAO {
             t.setStatus(resultado.getInt("status"));
             t.setID_Projeto(id_projeto);
             tarefa.add(t);
+
         }
+
+        Integer l = tarefa.size();
+        Integer k = 0;
+        while (k < l) {
+            for (int i = 0; i < ids.size(); i++) {
+                if (!tarefa.get(k).getId().equals(ids.get(i))) {
+                    tarefa.remove(k);
+                    l--;
+                }
+            }
+            k++;
+        }
+
+
         return tarefa;
     }
 
@@ -271,6 +349,14 @@ public class TarefaDAOJDBC implements TarefaDAO {
         operacaoInserirTarefaRequisito.setInt(2, id_tarefa_requisito);
         operacaoInserirTarefaRequisito.executeUpdate();
 
+    }
+
+    @Override
+    public void removerTarefaRequisito(Integer id_tarefa_atual, Integer id_tarefa_requisito) throws Exception {
+        operacaoRemoverTarefaRequisito.clearParameters();
+        operacaoRemoverTarefaRequisito.setInt(1, id_tarefa_atual);
+        operacaoRemoverTarefaRequisito.setInt(2, id_tarefa_requisito);
+        operacaoRemoverTarefaRequisito.executeUpdate();
     }
 
     @Override
@@ -310,6 +396,31 @@ public class TarefaDAOJDBC implements TarefaDAO {
         operacaoAtualizarStatus.setInt(1, status);
         operacaoAtualizarStatus.setInt(2, id_tarefa);
         operacaoAtualizarStatus.clearParameters();
+    }
+
+    @Override
+    public boolean verificarConclusao(Integer id_projeto, Integer id_tarefa) throws Exception {
+        boolean saida = false;
+        List<Tarefa> requisitos = listarTarefasPossivelRequisito(id_projeto, id_tarefa);
+        for (int i = 0; i < requisitos.size(); i++) {
+            if (requisitos.get(i).getStatus() != 2) {
+                saida = false;
+            } else {
+                saida = true;
+            }
+        }
+
+        return saida;
+    }
+
+    @Override
+    public void concluirTarefa(Integer id_projeto, Integer id_tarefa) throws Exception {
+        if (verificarConclusao(id_projeto, id_tarefa)) {
+            atualizarTarefaDataFim(id_tarefa);
+            atualizarTarefaStatus(id_tarefa, 2);
+        } else {
+            JOptionPane.showMessageDialog(null, "Existem outras tarefas para serem realizadas antes!", "INFO", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
 }

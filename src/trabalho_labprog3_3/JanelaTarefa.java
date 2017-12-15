@@ -20,8 +20,12 @@ public class JanelaTarefa extends javax.swing.JFrame {
 
     Integer idProjeto;
     Integer idTarefaAtual;
+    Integer idTarefaRequisitoL;
+    Integer idTarefaRequisitoR;
     Integer idPessoa;
     List<Tarefa> tarefas;
+    List<Tarefa> tarefasR;
+    List<Tarefa> tarefasL;
     List<Pessoa> pessoas;
     List<Projeto> projetos;
 
@@ -109,6 +113,12 @@ public class JanelaTarefa extends javax.swing.JFrame {
         txtStatusEditar = new javax.swing.JTextField();
         btnAlterarTarefa = new javax.swing.JButton();
         btnAtualizarDataFinal = new javax.swing.JButton();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        lstTarefaPossivelRequisito = new javax.swing.JList<>();
+        btnRemoverTarefaRequisito = new javax.swing.JButton();
+        jLabel13 = new javax.swing.JLabel();
+        btnConcluirTarefa = new javax.swing.JButton();
+        btnListarTarefasLR = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(new java.awt.Dimension(0, 0));
@@ -163,7 +173,7 @@ public class JanelaTarefa extends javax.swing.JFrame {
 
         jLabel4.setText("Requisitos");
 
-        btnAdicionarTarefaRequisito.setText("Adicionar Tarefa como Requisito");
+        btnAdicionarTarefaRequisito.setText("Adicionar");
         btnAdicionarTarefaRequisito.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAdicionarTarefaRequisitoActionPerformed(evt);
@@ -437,6 +447,26 @@ public class JanelaTarefa extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jScrollPane6.setViewportView(lstTarefaPossivelRequisito);
+
+        btnRemoverTarefaRequisito.setText("Remover");
+        btnRemoverTarefaRequisito.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoverTarefaRequisitoActionPerformed(evt);
+            }
+        });
+
+        jLabel13.setText("Livres");
+
+        btnConcluirTarefa.setText("Concluir");
+
+        btnListarTarefasLR.setText("Listar");
+        btnListarTarefasLR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListarTarefasLRActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -444,15 +474,15 @@ public class JanelaTarefa extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtNomePessoa)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCadastrarPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1)
-                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
@@ -475,25 +505,38 @@ public class JanelaTarefa extends javax.swing.JFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(2, 2, 2)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDetalhes, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnAdicionarTarefaRequisito, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
+                                    .addComponent(btnRemoverTarefaRequisito, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jLabel13))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAdicionarTarefaRequisito))
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(28, 28, 28))
+                        .addGap(2, 2, 2)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnListarTarefasLR)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel3)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btnDetalhes, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnConcluirTarefa))
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
@@ -502,7 +545,7 @@ public class JanelaTarefa extends javax.swing.JFrame {
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(btnCadastrarPessoa)
@@ -524,30 +567,39 @@ public class JanelaTarefa extends javax.swing.JFrame {
                                     .addComponent(txtTipoProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel8))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btnCadastrarProjeto)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(btnCadastrarProjeto)
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
-                            .addComponent(btnDetalhes))
+                            .addComponent(btnDetalhes)
+                            .addComponent(btnConcluirTarefa))
                         .addGap(10, 10, 10)
                         .addComponent(jScrollPane4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnAdicionarTarefaRequisito)
-                            .addComponent(jLabel4))
-                        .addGap(239, 239, 239)))
+                        .addGap(5, 5, 5)
+                        .addComponent(btnListarTarefasLR)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel13))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(btnAdicionarTarefaRequisito)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btnRemoverTarefaRequisito))))))
                 .addGap(9, 9, 9)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(63, 63, 63))
         );
 
         pack();
@@ -693,15 +745,25 @@ public class JanelaTarefa extends javax.swing.JFrame {
     }//GEN-LAST:event_btnTarefasIniciaveisActionPerformed
 
     private void btnAdicionarTarefaRequisitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarTarefaRequisitoActionPerformed
-        if (!lstProjetos.isSelectionEmpty() && !lstTarefas.isSelectionEmpty()) {
+        if (!lstProjetos.isSelectionEmpty() && !lstTarefas.isSelectionEmpty() && !lstTarefaPossivelRequisito.isSelectionEmpty()) {
             idProjeto = lstProjetos.getSelectedValue().getId();
             tarefas = new ArrayList<>();
             idTarefaAtual = lstTarefas.getSelectedValue().getId();
+            idTarefaRequisitoL = lstTarefaPossivelRequisito.getSelectedValue().getId();
             try {
                 TarefaDAO dao = new TarefaDAOJDBC();
-                tarefas = dao.listarTarefasRequisito(idProjeto, idTarefaAtual);
+                dao.cadastrarTarefaRequisito(idTarefaAtual, idTarefaRequisitoL);
+                tarefas = dao.listarTarefasPossivelRequisito(idProjeto, idTarefaAtual);
                 lstTarefasRequisitos.setModel(new TarefaListModel(tarefas));
                 lstTarefasRequisitos.updateUI();
+
+                tarefasL = dao.listarTarefasNaoRequisito(idProjeto, idTarefaAtual);
+                tarefasR = dao.listarTarefasPossivelRequisito(idProjeto, idTarefaAtual);
+                lstTarefaPossivelRequisito.setModel(new TarefaListModel(tarefasL));
+                lstTarefasRequisitos.setModel(new TarefaListModel(tarefasR));
+                lstTarefasRequisitos.updateUI();
+                lstTarefaPossivelRequisito.updateUI();
+
             } catch (Exception ex) {
                 Logger.getLogger(JanelaTarefa.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -766,6 +828,7 @@ public class JanelaTarefa extends javax.swing.JFrame {
                 tarefas = dao.listarTarefasProjeto(idProjeto);
 
                 lstTarefas.setModel(new TarefaListModel(tarefas));
+                lstTarefas.updateUI();
             } catch (Exception ex) {
                 Logger.getLogger(JanelaTarefa.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -815,6 +878,10 @@ public class JanelaTarefa extends javax.swing.JFrame {
                     dao.atualizarTarefaStatus(idTarefaAtual, t.getStatus());
 
                 }
+                tarefas = dao.listarTarefasProjeto(idProjeto);
+
+                lstTarefas.setModel(new TarefaListModel(tarefas));
+                lstTarefas.updateUI();
 
             } catch (Exception ex) {
                 Logger.getLogger(JanelaTarefa.class.getName()).log(Level.SEVERE, null, ex);
@@ -830,6 +897,11 @@ public class JanelaTarefa extends javax.swing.JFrame {
             try {
                 TarefaDAO dao = new TarefaDAOJDBC();
                 dao.atualizarTarefaDataFim(idTarefaAtual);
+                tarefas = dao.listarTarefasProjeto(idProjeto);
+
+                lstTarefas.setModel(new TarefaListModel(tarefas));
+                lstTarefas.updateUI();
+
             } catch (Exception ex) {
                 Logger.getLogger(JanelaTarefa.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -838,6 +910,52 @@ public class JanelaTarefa extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_btnAtualizarDataFinalActionPerformed
+
+    private void btnRemoverTarefaRequisitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverTarefaRequisitoActionPerformed
+        if (!lstProjetos.isSelectionEmpty() && !lstTarefas.isSelectionEmpty() && !lstTarefasRequisitos.isSelectionEmpty()) {
+            idProjeto = lstProjetos.getSelectedValue().getId();
+            tarefas = new ArrayList<>();
+            idTarefaAtual = lstTarefas.getSelectedValue().getId();
+            idTarefaRequisitoR = lstTarefasRequisitos.getSelectedValue().getId();
+            try {
+                TarefaDAO dao = new TarefaDAOJDBC();
+                dao.removerTarefaRequisito(idTarefaAtual, idTarefaRequisitoR);
+                tarefas = dao.listarTarefasPossivelRequisito(idProjeto, idTarefaAtual);
+                lstTarefasRequisitos.setModel(new TarefaListModel(tarefas));
+                lstTarefasRequisitos.updateUI();
+
+                tarefasL = dao.listarTarefasNaoRequisito(idProjeto, idTarefaAtual);
+                tarefasR = dao.listarTarefasPossivelRequisito(idProjeto, idTarefaAtual);
+                lstTarefaPossivelRequisito.setModel(new TarefaListModel(tarefasL));
+                lstTarefasRequisitos.setModel(new TarefaListModel(tarefasR));
+                lstTarefasRequisitos.updateUI();
+                lstTarefaPossivelRequisito.updateUI();
+
+            } catch (Exception ex) {
+                Logger.getLogger(JanelaTarefa.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnRemoverTarefaRequisitoActionPerformed
+
+    private void btnListarTarefasLRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarTarefasLRActionPerformed
+        if (!lstProjetos.isSelectionEmpty() && !lstTarefas.isSelectionEmpty()) {
+            idTarefaAtual = lstTarefas.getSelectedValue().getId();
+            idProjeto = lstProjetos.getSelectedValue().getId();
+            try {
+                TarefaDAO dao = new TarefaDAOJDBC();
+                tarefasL = dao.listarTarefasNaoRequisito(idProjeto, idTarefaAtual);
+                tarefasR = dao.listarTarefasPossivelRequisito(idProjeto, idTarefaAtual);
+                lstTarefaPossivelRequisito.setModel(new TarefaListModel(tarefasL));
+                lstTarefasRequisitos.setModel(new TarefaListModel(tarefasR));
+                lstTarefasRequisitos.updateUI();
+                lstTarefaPossivelRequisito.updateUI();
+
+            } catch (Exception ex) {
+                Logger.getLogger(JanelaTarefa.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+    }//GEN-LAST:event_btnListarTarefasLRActionPerformed
 
     /**
      * @param args the command line arguments
@@ -850,9 +968,12 @@ public class JanelaTarefa extends javax.swing.JFrame {
     private javax.swing.JButton btnAtualizarDataFinal;
     private javax.swing.JButton btnCadastrarPessoa;
     private javax.swing.JButton btnCadastrarProjeto;
+    private javax.swing.JButton btnConcluirTarefa;
     private javax.swing.JButton btnCriarTarefa;
     private javax.swing.JButton btnDetalhes;
     private javax.swing.JButton btnListarPessoasTarefas;
+    private javax.swing.JButton btnListarTarefasLR;
+    private javax.swing.JButton btnRemoverTarefaRequisito;
     private javax.swing.JButton btnTarefasConcluidas;
     private javax.swing.JButton btnTarefasIniciaveis;
     private javax.swing.JButton btnTarefasPorFazer;
@@ -861,6 +982,7 @@ public class JanelaTarefa extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
@@ -882,8 +1004,10 @@ public class JanelaTarefa extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JList<Pessoa> lstPessoasTarefas;
     private javax.swing.JList<Projeto> lstProjetos;
+    private javax.swing.JList<Tarefa> lstTarefaPossivelRequisito;
     private javax.swing.JList<Tarefa> lstTarefas;
     private javax.swing.JList<Tarefa> lstTarefasRequisitos;
     private javax.swing.JList<Pessoa> lstTodasPessoas;

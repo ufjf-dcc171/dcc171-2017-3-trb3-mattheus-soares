@@ -24,10 +24,17 @@ public interface TarefaDAO {
 
     public void cadastrarPessoa(Integer tarefa, Integer pessoa) throws Exception;
     public List<Pessoa> listarPessoaTarefa(Integer id_tarefa) throws Exception;
-    public List<Tarefa> listarTarefasRequisito(Integer id_projeto,Integer id_tarefa) throws Exception;
+    public List<Tarefa> listarTarefasPossivelRequisito(Integer id_projeto,Integer id_tarefa) throws Exception;
     public void cadastrarTarefaRequisito(Integer id_tarefa_atual,Integer id_tarefa_requisito) throws Exception;
+    public void removerTarefaRequisito(Integer id_tarefa_atual,Integer id_tarefa_requisito) throws Exception;
 
+    
+    public boolean verificarConclusao(Integer id_projeto, Integer id_tarefa)throws Exception;
+    public void concluirTarefa(Integer id_projeto, Integer id_tarefa)throws Exception;
+    public List<Tarefa> listarTarefasNaoRequisito(Integer id_projeto,Integer id_tarefa) throws Exception;
+    
 
+    
     public void atualizarTarefaDescricao(Integer id_tarefa, String descricao)throws Exception;
     public void atualizarTarefaDuracaoEsperada(Integer id_tarefa, Integer duracao_esperada)throws Exception;
     public void atualizarTarefaPercentual(Integer id_tarefa, Double percentual)throws Exception;
